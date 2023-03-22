@@ -1,8 +1,12 @@
+let albumUnici = 0;
+
 window.onload = () => {   
     let initialString = "pinguini%20tattici%20nucleari";
     addToSearchDiv(initialString);
     
 }
+
+
 
 function search() {
     let searchField = document.getElementById("searchField");
@@ -10,6 +14,16 @@ function search() {
         addToSearchDiv(searchField.value);
         searchField.value = ""
     }
+}
+
+function insertInModal(songs){
+    let albumList = document.getElementById("album-list"); 
+    albumList.innerHTML = "";
+    songs.forEach(song => {
+        let li = document.createElement("li")
+        li.innerText = song.album.title;
+        albumList.appendChild(li);
+    });
 }
 
 function addToSearchDiv(string){
@@ -25,14 +39,30 @@ function addToSearchDiv(string){
     spinnerDiv.appendChild(spinnerSpan);
     searchDiv.appendChild(spinnerDiv);
     fetchAlbums(string).then(
-        albums => {
+        songs => {
             spinnerDiv.remove();
-            console.log(albums)
-            for (let album of albums) {
-                searchResults.appendChild(createCard(album));
+            console.log(songs)
+            albumUnici = uniciArrLength(songs);
+            insertInModal(songs);
+            for (let song of songs) {
+                searchResults.appendChild(createCard(song));
             }
         }
     );
+}
+
+function uniciArrLength(songs) {
+    let uniciArr = [];
+    songs.forEach(song => {
+        if (uniciArr.indexOf(song.album.title)=== -1) {
+            uniciArr.push(song.album.title)
+        }
+    })
+    return uniciArr.length;
+}
+
+function printUnici(){
+    console.log(albumUnici);
 }
 
 function fetchAlbums(string){
