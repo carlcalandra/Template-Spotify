@@ -41,7 +41,6 @@ function addToSearchDiv(string){
     fetchAlbums(string).then(
         songs => {
             spinnerDiv.remove();
-            console.log(songs)
             albumUnici = uniciArrLength(songs);
             insertInModal(songs);
             for (let song of songs) {
